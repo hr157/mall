@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Date;
 
 /**
  * 会员关注Service实现类
@@ -31,6 +31,7 @@ public class MemberAttentionServiceImpl implements MemberAttentionService {
         memberBrandAttention.setMemberId(member.getId());
         memberBrandAttention.setMemberNickname(member.getNickname());
         memberBrandAttention.setMemberIcon(member.getIcon());
+        memberBrandAttention.setCreateTime(new Date());
         MemberBrandAttention findAttention = memberBrandAttentionRepository.findByMemberIdAndBrandId(memberBrandAttention.getMemberId(), memberBrandAttention.getBrandId());
         if (findAttention == null) {
             memberBrandAttentionRepository.save(memberBrandAttention);
@@ -50,5 +51,17 @@ public class MemberAttentionServiceImpl implements MemberAttentionService {
         UmsMember member = memberService.getCurrentMember();
         Pageable pageable = PageRequest.of(pageNum-1,pageSize);
         return memberBrandAttentionRepository.findByMemberId(member.getId(),pageable);
+    }
+
+    @Override
+    public MemberBrandAttention detail(Long brandId) {
+        UmsMember member = memberService.getCurrentMember();
+        return memberBrandAttentionRepository.findByMemberIdAndBrandId(member.getId(), brandId);
+    }
+
+    @Override
+    public void clear() {
+        UmsMember member = memberService.getCurrentMember();
+        memberBrandAttentionRepository.deleteAllByMemberId(member.getId());
     }
 }

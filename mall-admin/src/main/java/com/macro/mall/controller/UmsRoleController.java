@@ -6,6 +6,7 @@ import com.macro.mall.model.*;
 import com.macro.mall.service.UmsRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 后台用户角色管理
+ * 后台用户角色管理Controller
  * Created by macro on 2018/9/30.
  */
 @Controller
-@Api(tags = "UmsRoleController", description = "后台用户角色管理")
+@Api(tags = "UmsRoleController")
+@Tag(name = "UmsRoleController", description = "后台用户角色管理")
 @RequestMapping("/role")
 public class UmsRoleController {
     @Autowired
@@ -50,26 +52,6 @@ public class UmsRoleController {
     @ResponseBody
     public CommonResult delete(@RequestParam("ids") List<Long> ids) {
         int count = roleService.delete(ids);
-        if (count > 0) {
-            return CommonResult.success(count);
-        }
-        return CommonResult.failed();
-    }
-
-    @ApiOperation("获取相应角色权限")
-    @RequestMapping(value = "/permission/{roleId}", method = RequestMethod.GET)
-    @ResponseBody
-    public CommonResult<List<UmsPermission>> getPermissionList(@PathVariable Long roleId) {
-        List<UmsPermission> permissionList = roleService.getPermissionList(roleId);
-        return CommonResult.success(permissionList);
-    }
-
-    @ApiOperation("修改角色权限")
-    @RequestMapping(value = "/permission/update", method = RequestMethod.POST)
-    @ResponseBody
-    public CommonResult updatePermission(@RequestParam Long roleId,
-                                         @RequestParam("permissionIds") List<Long> permissionIds) {
-        int count = roleService.updatePermission(roleId, permissionIds);
         if (count > 0) {
             return CommonResult.success(count);
         }

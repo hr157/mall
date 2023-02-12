@@ -7,20 +7,21 @@ import com.macro.mall.model.PmsBrand;
 import com.macro.mall.service.PmsBrandService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * 品牌功能Controller
+ * 商品品牌管理Controller
  * Created by macro on 2018/4/26.
  */
 @Controller
-@Api(tags = "PmsBrandController", description = "商品品牌管理")
+@Api(tags = "PmsBrandController")
+@Tag(name = "PmsBrandController", description = "商品品牌管理")
 @RequestMapping("/brand")
 public class PmsBrandController {
     @Autowired
@@ -36,7 +37,7 @@ public class PmsBrandController {
     @ApiOperation(value = "添加品牌")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult create(@Validated @RequestBody PmsBrandParam pmsBrand, BindingResult result) {
+    public CommonResult create(@Validated @RequestBody PmsBrandParam pmsBrand) {
         CommonResult commonResult;
         int count = brandService.createBrand(pmsBrand);
         if (count == 1) {
@@ -51,8 +52,7 @@ public class PmsBrandController {
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     @ResponseBody
     public CommonResult update(@PathVariable("id") Long id,
-                               @Validated @RequestBody PmsBrandParam pmsBrandParam,
-                               BindingResult result) {
+                               @Validated @RequestBody PmsBrandParam pmsBrandParam) {
         CommonResult commonResult;
         int count = brandService.updateBrand(id, pmsBrandParam);
         if (count == 1) {
@@ -79,9 +79,10 @@ public class PmsBrandController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult<CommonPage<PmsBrand>> getList(@RequestParam(value = "keyword", required = false) String keyword,
+                                                      @RequestParam(value = "showStatus",required = false) Integer showStatus,
                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        List<PmsBrand> brandList = brandService.listBrand(keyword, pageNum, pageSize);
+        List<PmsBrand> brandList = brandService.listBrand(keyword,showStatus,pageNum, pageSize);
         return CommonResult.success(CommonPage.restPage(brandList));
     }
 

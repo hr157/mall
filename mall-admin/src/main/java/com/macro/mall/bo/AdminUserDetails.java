@@ -11,12 +11,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * SpringSecurity需要的用户详情
+ * SpringSecurity需要的用户信息封装类
  * Created by macro on 2018/4/26.
  */
 public class AdminUserDetails implements UserDetails {
-    private UmsAdmin umsAdmin;
-    private List<UmsResource> resourceList;
+    //后台用户
+    private final UmsAdmin umsAdmin;
+    //拥有资源列表
+    private final List<UmsResource> resourceList;
+
     public AdminUserDetails(UmsAdmin umsAdmin,List<UmsResource> resourceList) {
         this.umsAdmin = umsAdmin;
         this.resourceList = resourceList;

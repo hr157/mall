@@ -11,8 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
  * 会员收藏Service实现类
  * Created by macro on 2018/8/2.
@@ -48,7 +46,19 @@ public class MemberCollectionServiceImpl implements MemberCollectionService {
     @Override
     public Page<MemberProductCollection> list(Integer pageNum, Integer pageSize) {
         UmsMember member = memberService.getCurrentMember();
-        Pageable pageable = PageRequest.of(pageNum-1,pageSize);
-        return productCollectionRepository.findByMemberId(member.getId(),pageable);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        return productCollectionRepository.findByMemberId(member.getId(), pageable);
+    }
+
+    @Override
+    public MemberProductCollection detail(Long productId) {
+        UmsMember member = memberService.getCurrentMember();
+        return productCollectionRepository.findByMemberIdAndProductId(member.getId(), productId);
+    }
+
+    @Override
+    public void clear() {
+        UmsMember member = memberService.getCurrentMember();
+        productCollectionRepository.deleteAllByMemberId(member.getId());
     }
 }

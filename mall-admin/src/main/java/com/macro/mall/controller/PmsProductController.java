@@ -9,9 +9,9 @@ import com.macro.mall.model.PmsProduct;
 import com.macro.mall.service.PmsProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +21,8 @@ import java.util.List;
  * Created by macro on 2018/4/26.
  */
 @Controller
-@Api(tags = "PmsProductController", description = "商品管理")
+@Api(tags = "PmsProductController")
+@Tag(name = "PmsProductController", description = "商品管理")
 @RequestMapping("/product")
 public class PmsProductController {
     @Autowired
@@ -30,7 +31,7 @@ public class PmsProductController {
     @ApiOperation("创建商品")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult create(@RequestBody PmsProductParam productParam, BindingResult bindingResult) {
+    public CommonResult create(@RequestBody PmsProductParam productParam) {
         int count = productService.create(productParam);
         if (count > 0) {
             return CommonResult.success(count);
@@ -50,7 +51,7 @@ public class PmsProductController {
     @ApiOperation("更新商品")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult update(@PathVariable Long id, @RequestBody PmsProductParam productParam, BindingResult bindingResult) {
+    public CommonResult update(@PathVariable Long id, @RequestBody PmsProductParam productParam) {
         int count = productService.update(id, productParam);
         if (count > 0) {
             return CommonResult.success(count);
@@ -91,7 +92,7 @@ public class PmsProductController {
         }
     }
 
-    @ApiOperation("批量上下架")
+    @ApiOperation("批量上下架商品")
     @RequestMapping(value = "/update/publishStatus", method = RequestMethod.POST)
     @ResponseBody
     public CommonResult updatePublishStatus(@RequestParam("ids") List<Long> ids,
